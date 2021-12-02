@@ -15,6 +15,22 @@ const defaultTyping = [
 const defaultPausingCount = 5; //一文字あたりのタイピングスピードの何倍待つか
 const defaultTypingAnimationDuration = Duration(milliseconds: 100);
 
+class TypingAnimationContainer extends StatelessWidget {
+  //stateless widgetで囲むとconst宣言できる
+  const TypingAnimationContainer({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        vertical: 20,
+      ),
+      child: TypingAnimation(),
+    );
+  }
+}
+
 class TypingAnimation extends StatefulWidget {
   TypingAnimation({
     Key? key,
@@ -22,10 +38,11 @@ class TypingAnimation extends StatefulWidget {
     this.pausingCount = defaultPausingCount,
     this.typingAnimationDuration = defaultTypingAnimationDuration,
   })  : _titleIterator = titleList.iterator, // titleIteratorを初期化する
+        assert(
+          titleList.isNotEmpty,
+          "title must not be empty",
+        ),
         super(key: key) {
-    if (titleList.isEmpty) {
-      throw ArgumentError("title must not be empty");
-    }
     //これはcurrentを呼ぶ前に必ずしなければいけないらしい
     _titleIterator.moveNext();
   }
@@ -43,7 +60,7 @@ class _TypingAnimationState extends State<TypingAnimation> {
   bool _isTyping = true;
   int _characters = 0; // 何文字目か
   bool _isForward = true; // 文字追加中か
-  int _pausingCount = defaultPausingCount;
+  late int _pausingCount;
   String _displayString = "";
   bool _isEnd = false;
 
@@ -54,7 +71,8 @@ class _TypingAnimationState extends State<TypingAnimation> {
           // もしタイピング中で(文字数が変化していたら)
           if (_isForward) {
             // もし文字数がどんどん増えていく方針だったら
-            if (_characters == widget._titleIterator.current.length) {
+            if (_characters ==
+                widget._titleIterator.current.characters.length) {
               // もし文字数が限界まで来たら
               _isTyping = false; //タイピングを中止する
               _isForward = false; //文字数を減らす方向にシフトする
@@ -103,8 +121,15 @@ class _TypingAnimationState extends State<TypingAnimation> {
   @override
   Widget build(BuildContext context) {
     if (!_isEnd) {
-      _displayString = widget._titleIterator.current.substring(0, _characters);
+      _displayString =
+          widget._titleIterator.current.characters.take(_characters).string;
     }
-    return Text(_displayString);
+    return Text(
+      _displayString,
+      style: const TextStyle(
+        color: Color(0xFFFFFFFF),
+        fontSize: 50,
+      ),
+    );
   }
 }

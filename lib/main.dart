@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'typing.dart';
+import "hide4063.dart";
 
-const _animationDuration = Duration(seconds: 15);
+const animationDuration = Duration(seconds: 10);
 
 void main() {
   runApp(const MyApp());
@@ -52,11 +53,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  // int _counter = 0;
 
   bool _first = false;
-  bool isHomePageAnimationStarted = false;
-  final Widget typingAnimation = TypingAnimation();
   void changeAnimation(Timer timer) {
     setState(() {
       _first = !_first;
@@ -69,8 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    Timer.periodic(_animationDuration, changeAnimation);
-    isHomePageAnimationStarted = true;
+    Timer.periodic(animationDuration, changeAnimation);
     super.initState();
     Timer(const Duration(seconds: 1), firstAnimation);
     // 一秒後に最初のアニメーションを開始させる
@@ -78,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // 始まることになって、おそい
   }
 
-  void _incrementCounter() {
+  /*  void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -87,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -145,25 +143,26 @@ class _MyHomePageState extends State<MyHomePage> {
             // axis because Columns are vertical (the cross axis would be
             // horizontal).
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'isHomePageAnimationStarted:$isHomePageAnimationStarted You have pushed the button this many times:',
+            children: const <Widget>[
+              /*              const Text(
+                'You have pushed the button this many times:',
               ),
               Text(
                 '$_counter',
                 style: Theme.of(context).textTheme.headline4,
               ),
-              typingAnimation
+              const TypingAnimationContainer(), */
+              Hide4063Container()
             ],
           ),
         ),
-        duration: _animationDuration,
+        duration: animationDuration,
       ),
-      floatingActionButton: FloatingActionButton(
+      /* floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ), */ // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
