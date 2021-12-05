@@ -12,7 +12,7 @@ const defaultTyping = [
   "Default Typing8",
   "Default Typing9",
 ];
-const defaultPausingCount = 16; //一文字あたりのタイピングスピードの何倍待つか
+const defaultPausingCount = 12; //一文字あたりのタイピングスピードの何倍待つか
 const defaultTypingAnimationDuration = Duration(milliseconds: 100);
 
 class TypingAnimationContainer extends StatelessWidget {
@@ -67,7 +67,9 @@ class TypingAnimation extends StatefulWidget {
   State<TypingAnimation> createState() => _TypingAnimationState();
 }
 
-class _TypingAnimationState extends State<TypingAnimation> {
+class _TypingAnimationState extends State<TypingAnimation>
+    with
+        SingleTickerProviderStateMixin /* ここもanimationControllerを使うためのおまじない */ {
   bool _isTyping = true;
   int _characters = 0; // 何文字目か
   bool _isForward = true; // 文字追加中か
@@ -75,6 +77,7 @@ class _TypingAnimationState extends State<TypingAnimation> {
   String _displayString = "";
   bool _isEnd = false;
   double opacity = 1.0;
+  late AnimationController _controller;
 
   void changeAnimation(Timer timer) {
     if (!_isEnd) {
@@ -102,6 +105,7 @@ class _TypingAnimationState extends State<TypingAnimation> {
                 _displayString = defaultTyping[0];
                 _isEnd = true;
                 timer.cancel(); //timerをキャンセルしてアニメーションをしない
+                _controller.repeat(reverse: true);
               }
             } else {
               //まだ文字数が減らせるなら
@@ -118,14 +122,20 @@ class _TypingAnimationState extends State<TypingAnimation> {
           } else {
             //もしまだ止まるカウントを減らせるなら
             _pausingCount--; //減らしてみる
-            int opacityCount = _pausingCount % 4;
+            if (_pausingCount % 6 == 0) {
+              _controller.forward();
+            }
+            if (_pausingCount % 6 == 3) {
+              _controller.reverse();
+            }
+            /*  int opacityCount = _pausingCount % 4;
             if (opacityCount % 2 == 1) {
               opacity = 0.5;
             } else if (opacityCount == 0) {
               opacity = 1.0;
             } else {
               opacity = 0.0;
-            }
+            } */
           }
         }
       });
@@ -136,7 +146,26 @@ class _TypingAnimationState extends State<TypingAnimation> {
   void initState() {
     _pausingCount = widget.pausingCount;
     Timer.periodic(widget.typingAnimationDuration, changeAnimation);
+
+    /* ここはanimationControllerを使うためのおまじない */
+    _controller = AnimationController(
+      duration: widget.typingAnimationDuration * 2,
+      lowerBound: 0.0,
+      upperBound: 1.0,
+      value: 1.0,
+      vsync: this, // the SingleTickerProviderStateMixin
+    );
+    _controller.addListener(() {
+      setState(() {});
+    });
     super.initState();
+  }
+
+/* ここもanimationControllerを使うためのおまじない */
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -152,7 +181,7 @@ class _TypingAnimationState extends State<TypingAnimation> {
           TextSpan(
             text: "|",
             style: TextStyle(
-              color: Color.fromRGBO(0xff, 0xff, 0xff, opacity),
+              color: Color.fromRGBO(0xff, 0xff, 0xff, _controller.value),
             ),
           ),
         ],
