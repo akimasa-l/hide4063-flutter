@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import "hide4063.dart";
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 const animationDuration = Duration(seconds: 10);
 
 void main() {
   runApp(const MyApp());
 }
+
+const locale = Locale("ja", "JP");
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -29,8 +33,25 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         
       ), */
-      theme: ThemeData.light(), // ライト用テーマ
-      darkTheme: ThemeData.dark(), // ダーク用テーマ
+      theme: ThemeData.light().copyWith(
+        textTheme: GoogleFonts.notoSansTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ), // ライト用テーマ
+      darkTheme: ThemeData.dark().copyWith(
+        textTheme: GoogleFonts.notoSansTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ), // ダーク用テーマ
+      locale: locale,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        locale,
+      ],
       themeMode: ThemeMode.system, //  モードをシステム設定にする
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
