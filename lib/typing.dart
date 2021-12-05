@@ -12,7 +12,7 @@ const defaultTyping = [
   "Default Typing8",
   "Default Typing9",
 ];
-const defaultPausingCount = 5; //一文字あたりのタイピングスピードの何倍待つか
+const defaultPausingCount = 16; //一文字あたりのタイピングスピードの何倍待つか
 const defaultTypingAnimationDuration = Duration(milliseconds: 100);
 
 class TypingAnimationContainer extends StatelessWidget {
@@ -74,6 +74,7 @@ class _TypingAnimationState extends State<TypingAnimation> {
   late int _pausingCount;
   String _displayString = "";
   bool _isEnd = false;
+  double opacity = 1.0;
 
   void changeAnimation(Timer timer) {
     if (!_isEnd) {
@@ -113,9 +114,16 @@ class _TypingAnimationState extends State<TypingAnimation> {
             //もし止まるカウントが0なら
             _isTyping = true; //タイピングを開始させる
             _pausingCount = widget.pausingCount; //止まるカウントをもとに戻しとく
+            opacity = 1.0;
           } else {
             //もしまだ止まるカウントを減らせるなら
             _pausingCount--; //減らしてみる
+            int opacityCount = _pausingCount ~/ 4;
+            if (opacityCount % 2 == 0) {
+              opacity = 0.0;
+            } else {
+              opacity = 1.0;
+            }
           }
         }
       });
@@ -135,11 +143,21 @@ class _TypingAnimationState extends State<TypingAnimation> {
       _displayString =
           widget._titleIterator.current.characters.take(_characters).string;
     }
-    return Text(
-      _displayString,
-      style: const TextStyle(
-        color: Color(0xFFFFFFFF),
-        fontSize: 50,
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(text: _displayString),
+          TextSpan(
+            text: "|",
+            style: TextStyle(
+              color: Color.fromRGBO(0xff, 0xff, 0xff, opacity),
+            ),
+          ),
+        ],
+        style: const TextStyle(
+          color: Color(0xFFFFFFFF),
+          fontSize: 40,
+        ),
       ),
       textAlign: TextAlign.center,
     );
