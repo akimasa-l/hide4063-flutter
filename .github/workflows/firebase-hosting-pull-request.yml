@@ -8,6 +8,11 @@ jobs:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
+      - name: install flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable' # or: 'beta', 'dev' or 'master'
+      - run: flutter pub get
       - uses: actions/checkout@v2
       - run: flutter build web --web-renderer html
       - uses: FirebaseExtended/action-hosting-deploy@v0
@@ -15,3 +20,6 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_HIDE_4063_FLUTTER }}'
           projectId: hide-4063-flutter
+      
+  
+
