@@ -118,11 +118,13 @@ class _TypingAnimationState extends State<TypingAnimation> {
           } else {
             //もしまだ止まるカウントを減らせるなら
             _pausingCount--; //減らしてみる
-            int opacityCount = _pausingCount ~/ 4;
-            if (opacityCount % 2 == 0) {
-              opacity = 0.0;
-            } else {
+            int opacityCount = _pausingCount % 4;
+            if (opacityCount % 2 == 1) {
+              opacity = 0.5;
+            } else if (opacityCount == 0) {
               opacity = 1.0;
+            } else {
+              opacity = 0.0;
             }
           }
         }
