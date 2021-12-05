@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'typing.dart';
 import "hide4063.dart";
 
 const animationDuration = Duration(seconds: 10);
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
+      /*theme:  ThemeData(
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -28,7 +27,11 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
-      ),
+        
+      ), */
+      theme: ThemeData.light(), // ライト用テーマ
+      darkTheme: ThemeData.dark(), // ダーク用テーマ
+      themeMode: ThemeMode.system, //  モードをシステム設定にする
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }

@@ -17,8 +17,15 @@ const defaultTypingAnimationDuration = Duration(milliseconds: 100);
 
 class TypingAnimationContainer extends StatelessWidget {
   //stateless widgetで囲むとconst宣言できる
-  const TypingAnimationContainer({Key? key}) : super(key: key);
-
+  const TypingAnimationContainer({
+    Key? key,
+    this.titleList = defaultTyping,
+    this.pausingCount = defaultPausingCount,
+    this.typingAnimationDuration = defaultTypingAnimationDuration,
+  }) : super(key: key);
+  final List<String> titleList;
+  final int pausingCount;
+  final Duration typingAnimationDuration;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -26,7 +33,11 @@ class TypingAnimationContainer extends StatelessWidget {
       margin: const EdgeInsets.symmetric(
         vertical: 20,
       ),
-      child: TypingAnimation(),
+      child: TypingAnimation(
+        titleList: titleList,
+        pausingCount: pausingCount,
+        typingAnimationDuration: typingAnimationDuration,
+      ),
     );
   }
 }
@@ -130,6 +141,7 @@ class _TypingAnimationState extends State<TypingAnimation> {
         color: Color(0xFFFFFFFF),
         fontSize: 50,
       ),
+      textAlign: TextAlign.center,
     );
   }
 }
