@@ -140,7 +140,7 @@ class _Hide4063State extends State<Hide4063> {
                         Colors.white,
 /*                         )
                         .primaryColor, */
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(15),
                     onPrimary: Colors.black45,
 
                     /* side: const BorderSide(
@@ -195,6 +195,9 @@ class _Hide4063State extends State<Hide4063> {
                         color: Colors.white,
                       ),
                     ),
+                    style: TextButton.styleFrom(
+                      padding:const EdgeInsets.all(15),
+                    ),
                     onPressed: onHide4063Pressed,
                   ),
                 ),
@@ -204,7 +207,7 @@ class _Hide4063State extends State<Hide4063> {
                   label: const Text("Twitterでシェアする！"),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue,
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(15),
                     onPrimary: Colors.white,
                   ),
                 )
